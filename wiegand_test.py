@@ -2,10 +2,7 @@ import RPi.GPIO as GPIO
 from time import sleep
 import sys
 
-
-def dummy_test_keys(key):
-    allowed_keys = [5374009, 3754335, 3791381]
-    return key in allowed_keys
+from userdb import UserDB
 
 
 class RFidReader(object):
@@ -44,39 +41,41 @@ class RFidReader(object):
                 print "Door release pressed"
                 open_door = True
 
-        # If we're not waiting for a bit (i.e. waiting for both lines to
-        # go low) and both lines go low, then mark us as ready to read a bit.
-        if not awaiting_bit:
-            if not d0 and not d1:
-                awaiting_bit = True
-            continue
+            # If we're not waiting for a bit (i.e. waiting for both lines to
+            # go low) and both lines go low, then mark us as ready to read a
+            # bit
+            if not awaiting_bit:
+                if not d0 and not d1:
+                    awaiting_bit = True
+                continue
 
-        # If we get to here, it's assumed we're expecting a bit.
-        if d0 != d1:    # Sure sign we have a bit...
-            if d1:
-                number_string = number_string + "1"
-            else:
-                number_string = number_string + "0"
-            awaiting_bit = False
-
-            if len(number_string) == 26:
-                # First and last bits are checksum bits, ignoring for now.
-                # TODO: use them to check that the number is valid
-                key_number = int(number_string[1:-1], 2)
-                print "Read tag: %d" % key_number
-
-                if testfn(key_number):
-                    print "Key accepted"
-                    open_door = True
+            # If we get to here, it's assumed we're expecting a bit.
+            if d0 != d1:    # Sure sign we have a bit...
+                if d1:
+                    number_string = number_string + "1"
                 else:
-                    print "Key not accepted"
-                number_string = ""
+                    number_string = number_string + "0"
+                awaiting_bit = False
 
-        if open_door:
-            GPIO.output(self.GPIO_PIN_SOLENOID, False)
-            sleep(2)
-            GPIO.output(self.GPIO_PIN_SOLENOID, True)
-            open_door = False
+                if len(number_string) == 26:
+                    # First and last bits are checksum bits, ignoring for now.
+                    # TODO: use them to check that the number is valid
+                    key_number = int(number_string[1:-1], 2)
+                    print "Read tag: %d" % key_number
+
+                    if testfn(key_number):
+                        print "Key accepted"
+                        open_door = True
+                    else:
+                        print "Key not accepted"
+                    number_string = ""
+
+            if open_door:
+                GPIO.output(self.GPIO_PIN_SOLENOID, False)
+                sleep(2)
+                GPIO.output(self.GPIO_PIN_SOLENOID, True)
+                open_door = False
 
 reader = RFidReader()
-reader.run(dummy_test_keys)
+db = UserDB()
+reader.run(db.authenticate)

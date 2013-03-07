@@ -43,9 +43,22 @@ class UserDB(object):
         else:
             return False
 
+    def get_all(self):
+        session = sessionmaker(bind=self.engine)()
+        res = session.query(User)
+        return res
+
 
 if __name__ == "__main__":
     db = UserDB()
-#    db.add_user("Duncan Thomas", "duncan.thomas@gmail.com", "12345")
-    print "Testing a valid key: %s" % db.authenticate("12345")
-    print "Testing an invalid key: %s" % db.authenticate("00000")
+#    db.add_user("Bob", "bob@example.com", "12345")
+#    print "Testing a valid key: %s" % db.authenticate("12345")
+#    print "Testing an invalid key: %s" % db.authenticate("00000")
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("name", help="Name of member")
+    parser.add_argument("email", help="Email address of member")
+    parser.add_argument("code", help="RFID key code")
+    args = parser.parse_args()
+    print "Adding user %s <%s> = %s" % (args.name, args.email, args.code)
+    db.add_user(args.name, args.email, args.code)
