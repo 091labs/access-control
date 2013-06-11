@@ -33,6 +33,18 @@ class UserDB(object):
         session.add(user)
         session.commit()
 
+    def remove_user(self, name, email, rfidkey):
+        session = sessionmaker(bind=self.engine)()
+        result = session.query(User).filter(User.name == name).\
+                                     filter(User.email == email).\
+                                     filter(User.rfidkey == rfidkey)
+
+        if result.count() > 1:
+            raise Exception("More than one result found.")
+
+        result.delete()
+        session.commit()
+
     def authenticate(self, rfidkey):
         session = sessionmaker(bind=self.engine)()
         res = session.query(User).filter(User.rfidkey == rfidkey)
