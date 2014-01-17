@@ -71,8 +71,10 @@ class RFidReader(object):
                     self.number_string = ""
 
             if self.open_door:
+                print "Maglock open"
                 GPIO.output(self.GPIO_PIN_SOLENOID, False)
                 sleep(2)
+                print "Maglock closed"
                 GPIO.output(self.GPIO_PIN_SOLENOID, True)
                 self.open_door = False
 
