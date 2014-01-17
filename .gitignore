@@ -1,8 +1,5 @@
 *.py[cod]
 
-# C extensions
-*.so
-
 # Packages
 *.egg
 *.egg-info
@@ -15,8 +12,6 @@ var
 sdist
 develop-eggs
 .installed.cfg
-lib
-lib64
 
 # Installer logs
 pip-log.txt
@@ -29,10 +24,5 @@ nosetests.xml
 # Translations
 *.mo
 
-# Mr Developer
-.mr.developer.cfg
-.project
-.pydevproject
-
-#Sublime
-sftp-config.json
+# User database should not be in git
+users.db
