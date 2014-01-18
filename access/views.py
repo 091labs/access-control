@@ -3,21 +3,26 @@ from access.forms import LoginForm
 from access.models import User
 
 from flask import g, redirect, url_for, render_template, request, flash
-from flask.ext.login import login_required, current_user, login_user, logout_user
+from flask.ext.login import login_required, current_user
+from flask.ext.login import login_user, logout_user
+
 
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(int(id))
 
+
 @app.before_request
 def before_request():
     g.user = current_user
+
 
 @app.route('/')
 @app.route('/index')
 @login_required
 def index():
     return render_template('base.html')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -32,6 +37,7 @@ def login():
                 flash('Logged in as %s' % user.email)
                 return redirect(request.args.get('next') or url_for('index'))
     return render_template('login.html', title='Sign in', form=form)
+
 
 @app.route('/logout')
 def logout():

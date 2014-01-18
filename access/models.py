@@ -4,6 +4,7 @@ import uuid
 from access import db
 from access.constants import ROLE_USER, ROLE_ADMIN
 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), unique=True, nullable=False)
