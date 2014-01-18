@@ -3,7 +3,7 @@ from access.constants import *
 from access.forms import LoginForm, NewAdminForm
 from access.models import User
 
-from flask import g, redirect, url_for, render_template, request, flash
+from flask import g, redirect, url_for, render_template, request, flash, abort
 from flask.ext.login import login_required, current_user
 from flask.ext.login import login_user, logout_user
 
@@ -44,15 +44,17 @@ def users():
 @login_required
 def make_admin(id):
     form = NewAdminForm()
+    user = User.query.get(id)
+    if not user:
+        abort(404)
     if form.validate_on_submit():
-        user = User.query.get(id)
         if user:
             user.make_admin(form.password.data)
             db.session.add(user)
             db.session.commit()
             flash('%s is now an admin' % user.email)
             return redirect(url_for('users'))
-    return render_template('new_admin.html', form=form)
+    return render_template('new_admin.html', user=user, form=form)
 
 
 @app.route('/user/make_user/<int:id>')

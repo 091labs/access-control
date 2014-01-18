@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+<h1>Set password</h1>
+<p>Set an admin password for <strong>{{ user.email }}</strong>.
+This will allow them to login to the web interface.</p>
 <form action="" method="post" name="new_admin">
     {{ form.hidden_tag() }}
     <p>
