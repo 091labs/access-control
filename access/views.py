@@ -1,5 +1,6 @@
-from access import login_manager, app
-from access.forms import LoginForm
+from access import login_manager, app, db
+from access.constants import *
+from access.forms import LoginForm, NewAdminForm
 from access.models import User
 
 from flask import g, redirect, url_for, render_template, request, flash
@@ -17,6 +18,15 @@ def before_request():
     g.user = current_user
 
 
+@app.context_processor
+def inject_constants():
+    # this disgusts me... but it works
+    return {
+        'ROLE_USER': ROLE_USER,
+        'ROLE_ADMIN': ROLE_ADMIN
+    }
+
+
 @app.route('/')
 @app.route('/index')
 @login_required
@@ -27,7 +37,34 @@ def index():
 @app.route('/users')
 @login_required
 def users():
-    return render_template('users.html', users=User.query.all())
+    return render_template('users.html', title='Users', users=User.query.all())
+
+
+@app.route('/users/make_admin/<int:id>', methods=['GET', 'POST'])
+@login_required
+def make_admin(id):
+    form = NewAdminForm()
+    if form.validate_on_submit():
+        user = User.query.get(id)
+        if user:
+            user.make_admin(form.password.data)
+            db.session.add(user)
+            db.session.commit()
+            flash('%s is now an admin' % user.email)
+            return redirect(url_for('users'))
+    return render_template('new_admin.html', form=form)
+
+
+@app.route('/user/make_user/<int:id>')
+@login_required
+def make_user(id):
+    user = User.query.get(id)
+    if user:
+        user.make_user()
+        db.session.add(user)
+        db.session.commit()
+        flash('%s is no longer an admin' % user.email)
+    return redirect(url_for('users'))
 
 
 @app.route('/login', methods=['GET', 'POST'])

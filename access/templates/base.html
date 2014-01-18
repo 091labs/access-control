@@ -9,7 +9,7 @@
         <title>091 Labs door control</title>
         {% endif %}
 
-        <link href="static/css/bootstrap.css" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
     </head>
     <body>
         {% with messages = get_flashed_messages() %}

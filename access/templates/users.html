@@ -4,14 +4,18 @@
 <h1>Users</h1>
 <hr>
 <table class="table table-striped">
-    <tr><th>ID</th><th>Name</th><th>E-mail</th><th>Key ID</th><th>Admin</th></tr>
+    <tr><th>ID</th><th>Name</th><th>E-mail</th><th>Key ID</th><th>&nbsp;</th></tr>
     {% for user in users %}
     <tr>
         <th>{{ user.id }}</th>
         <td>{{ user.name }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.key_id }}</td>
-        <td>{{ user.role }}</td>
+        {% if user.role == ROLE_USER %}
+            <td><a href="{{ url_for('make_admin', id=user.id) }}">Make admin</a></td>
+        {% else %}
+            <td><a href="{{ url_for('make_user', id=user.id) }}">Make user</a></td>
+        {% endif %}
     </tr>
     {% endfor %}
 </table>
