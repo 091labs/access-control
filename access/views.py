@@ -52,7 +52,7 @@ def make_admin(id):
             user.make_admin(form.password.data)
             db.session.add(user)
             db.session.commit()
-            flash('%s is now an admin' % user.email)
+            flash('%s is now an admin' % user.email, 'success')
             return redirect(url_for('users'))
     return render_template('new_admin.html', user=user, form=form)
 
@@ -65,7 +65,7 @@ def make_user(id):
         user.make_user()
         db.session.add(user)
         db.session.commit()
-        flash('%s is no longer an admin' % user.email)
+        flash('%s is no longer an admin' % user.email, 'info')
     return redirect(url_for('users'))
 
 
@@ -79,7 +79,7 @@ def login():
         if user:
             if user.check_password(form.password.data):
                 login_user(user=user, remember=form.remember_me.data)
-                flash('Logged in as %s' % user.email)
+                flash('Logged in as %s' % user.email, 'success')
                 return redirect(request.args.get('next') or url_for('index'))
     return render_template('login.html', title='Sign in', form=form)
 
@@ -87,4 +87,5 @@ def login():
 @app.route('/logout')
 def logout():
     logout_user()
+    flash('Logged out', 'info')
     return redirect(url_for('index'))
