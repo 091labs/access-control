@@ -1,7 +1,6 @@
-import argparse
-from userdb import UserDB
+#!/usr/bin/env python
+from access.models import User
 
-db = UserDB()
 print "Users enrolled:"
-for row in db.get_all():
-    print "%s <%s> = %s" % (row.name, row.email, row.rfidkey)
+for user in User.query.all():
+    print "%s <%s> = %d" % (user.name, user.email, user.key_id)
