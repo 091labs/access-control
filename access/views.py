@@ -21,7 +21,13 @@ def before_request():
 @app.route('/index')
 @login_required
 def index():
-    return render_template('base.html')
+    return redirect(url_for('users'))
+
+
+@app.route('/users')
+@login_required
+def users():
+    return render_template('users.html', users=User.query.all())
 
 
 @app.route('/login', methods=['GET', 'POST'])
