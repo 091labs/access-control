@@ -81,6 +81,8 @@ def login():
                 login_user(user=user, remember=form.remember_me.data)
                 flash('Logged in as %s' % user.email, 'success')
                 return redirect(request.args.get('next') or url_for('index'))
+            if user.role == ROLE_USER:
+                flash('Only admins may log in', 'danger')
     return render_template('login.html', title='Sign in', form=form)
 
 
