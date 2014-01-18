@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Set key</h1>
+<form action="" method="post" name="new_key">
+    {{ form.hidden_tag() }}
+    <p>
+        Key id:<br>
+        {{ form.key_id(size=30) }}<br>
+        {% for error in form.errors.key_id %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}<br>
+    </p>
+    <p><input type="submit" value="Make it so!"></p>
+</form>
+{% endblock %}

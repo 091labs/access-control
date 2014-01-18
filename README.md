@@ -1,4 +1,4 @@
 access-control
 ==============
 
-Prototype code for the door access control system
+Code for the door access control system
