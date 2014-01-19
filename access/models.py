@@ -21,6 +21,9 @@ class User(db.Model):
 
     def make_admin(self, password):
         self.role = ROLE_ADMIN
+        self.set_password(password)
+
+    def set_password(self, password):
         self.pw_salt = uuid.uuid4().hex
         self.pw_hash = hashlib.sha512(password + self.pw_salt).hexdigest()
 
