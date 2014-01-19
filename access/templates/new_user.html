@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>New user</h1>
+<form action="" method="post" name="new_user">
+    {{ form.hidden_tag() }}
+    <p>
+        Name:<br>
+        {{ form.name(size=60) }}<br>
+        {% for error in form.errors.name %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}<br>
+    </p>
+    <p>
+        E-mail:<br>
+        {{ form.email(size=60) }}<br>
+        {% for error in form.errors.email %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}<br>
+    </p>
+    <p>
+        Key id:<br>
+        {{ form.key_id(size=60) }}<br>
+        {% for error in form.errors.key_id %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}<br>
+    </p>
+    <p><input type="submit" value="Make it so!"></p>
+</form>
+{% endblock %}

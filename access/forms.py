@@ -19,3 +19,9 @@ class NewAdminForm(Form):
 
 class NewKeyForm(Form):
     key_id = TextField('key_id', validators=[Required()])
+
+
+class NewUserForm(Form):
+    name = TextField('name', validators=[Required()])
+    email = TextField('email', validators=[Required()])
+    key_id = TextField('key_id', validators=[Required()])
