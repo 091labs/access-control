@@ -9,7 +9,7 @@ class LoginForm(Form):
     remember_me = BooleanField('remember_me', default=False)
 
 
-class NewAdminForm(Form):
+class NewPasswordForm(Form):
     password = PasswordField('password', validators=[
         Required(),
         EqualTo('confirm', message='Passwords must match')

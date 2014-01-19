@@ -9,6 +9,14 @@
 </div>
 
 <hr>
+
+<div class="row">
+    <div class="col-md-6"><p>Logged in as <strong>{{ user.email }}</strong>.</p></div>
+    <div class="col-md-6">
+        <p class="pull-right"><a href="{{ url_for('logout') }}">Logout</a> | <a href="{{ url_for('change_password') }}">Change password</a></p>
+    </div>
+</div>
+
 <table class="table table-striped">
     <tr><th>ID</th><th>Name</th><th>E-mail</th><th>Key ID</th><th>&nbsp;</th><th>&nbsp;</th></tr>
     {% for user in users %}
