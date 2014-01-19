@@ -11,8 +11,8 @@ from access.models import User
 class RFidReader(object):
     GPIO_PIN_D0 = 17
     GPIO_PIN_D1 = 22
-    GPIO_PIN_DOOR_RELEASE = 23
-    GPIO_PIN_SOLENOID = 24
+    GPIO_PIN_DOOR_RELEASE = 21
+    GPIO_PIN_SOLENOID = 23
 
     def __init__(self):
         # Use the Broadcom numbering scheme
