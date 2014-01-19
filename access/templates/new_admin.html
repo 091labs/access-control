@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Set password</h1>
+<p>Set an admin password for <strong>{{ user.email }}</strong>.
+This will allow them to login to the web interface.</p>
+<form action="" method="post" name="new_admin">
+    {{ form.hidden_tag() }}
+    <p>
+        Password:<br>
+        {{ form.password(size=60) }}<br>
+        {% for error in form.errors.password %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}<br>
+    </p>
+    <p>
+        Confirm password:<br>
+        {{ form.confirm(size=60) }}<br>
+        {% for error in form.errors.confirm %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}<br>
+    </p>
+    <p><input type="submit" value="Make it so!"></p>
+</form>
+{% endblock %}

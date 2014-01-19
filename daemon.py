@@ -1,15 +1,18 @@
+#!/usr/bin/env python
+
 import RPi.GPIO as GPIO
 from time import sleep
 import sys
 
-from userdb import UserDB
+from access import db
+from access.models import User
 
 
 class RFidReader(object):
     GPIO_PIN_D0 = 17
     GPIO_PIN_D1 = 22
-    GPIO_PIN_DOOR_RELEASE = 23
-    GPIO_PIN_SOLENOID = 24
+    GPIO_PIN_DOOR_RELEASE = 21
+    GPIO_PIN_SOLENOID = 23
 
     def __init__(self):
         # Use the Broadcom numbering scheme
@@ -78,6 +81,13 @@ class RFidReader(object):
                 GPIO.output(self.GPIO_PIN_SOLENOID, True)
                 self.open_door = False
 
+
+def validate_key(key_id):
+    user = User.query.filter_by(key_id=key_id).first()
+    if user:
+        return True
+    return False
+
+
 reader = RFidReader()
-db = UserDB()
-reader.run(db.authenticate)
+reader.run(validate_key)
