@@ -83,7 +83,7 @@ class RFidReader(object):
 
 
 def validate_key(key_id):
-    User.query.filter_by(key_id=key_id).first()
+    user = User.query.filter_by(key_id=key_id).first()
     if user:
         return True
     return False
