@@ -10,7 +10,7 @@ class User(db.Model):
     name = db.Column(db.String(128), unique=True, nullable=False)
     email = db.Column(db.String(128), unique=True, nullable=False)
     role = db.Column(db.SmallInteger, default=ROLE_USER)
-    key_id = db.Column(db.Integer)
+    key_id = db.Column(db.Integer, unique=True)
     pw_hash = db.Column(db.String(128))
     pw_salt = db.Column(db.String(32))
 
