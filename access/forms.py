@@ -15,3 +15,7 @@ class NewAdminForm(Form):
         EqualTo('confirm', message='Passwords must match')
     ])
     confirm = PasswordField('confirm_password', validators=[Required()])
+
+
+class NewKeyForm(Form):
+    key_id = TextField('key_id', validators=[Required()])

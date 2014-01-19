@@ -1,6 +1,6 @@
 from access import login_manager, app, db
 from access.constants import *
-from access.forms import LoginForm, NewAdminForm
+from access.forms import LoginForm, NewAdminForm, NewKeyForm
 from access.models import User
 
 from flask import g, redirect, url_for, render_template, request, flash, abort
@@ -38,6 +38,23 @@ def index():
 @login_required
 def users():
     return render_template('users.html', title='Users', users=User.query.all())
+
+
+@app.route('/users/update_key/<int:id>', methods=['GET', 'POST'])
+@login_required
+def update_key(id):
+    form = NewKeyForm()
+    user = User.query.get(id)
+    if not user:
+        abort(404)
+    if form.validate_on_submit():
+        if user:
+            user.key_id = int(form.key_id.data)
+            db.session.add(user)
+            db.session.commit()
+            flash('Key (%d) set for %s' % (user.key_id, user.email), 'success')
+            return redirect(url_for('users'))
+    return render_template('new_key.html', user=user, form=form)
 
 
 @app.route('/users/make_admin/<int:id>', methods=['GET', 'POST'])

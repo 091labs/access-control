@@ -10,7 +10,7 @@
         <th>{{ user.id }}</th>
         <td>{{ user.name }}</td>
         <td>{{ user.email }}</td>
-        <td>{{ user.key_id }}</td>
+        <td>{{ user.key_id }} <small><a href="{{ url_for('update_key', id=user.id) }}">(change)</a></small></td>
         {% if user.role == ROLE_USER %}
             <td><a href="{{ url_for('make_admin', id=user.id) }}">Make admin</a></td>
         {% else %}
