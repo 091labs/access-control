@@ -1,8 +1,10 @@
+#!/usr/bin/env python
+
 import RPi.GPIO as GPIO
 from time import sleep
 import sys
 
-from userdb import UserDB
+from access import db
 
 
 class RFidReader(object):
@@ -78,6 +80,13 @@ class RFidReader(object):
                 GPIO.output(self.GPIO_PIN_SOLENOID, True)
                 self.open_door = False
 
+
+def validate_key(key_id):
+    User.query.filter_by(key_id=key_id).first()
+    if user:
+        return True
+    return False
+
+
 reader = RFidReader()
-db = UserDB()
-reader.run(db.authenticate)
+reader.run(validate_key)
