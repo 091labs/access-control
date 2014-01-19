@@ -5,6 +5,7 @@ from time import sleep
 import sys
 
 from access import db
+from access.models import User
 
 
 class RFidReader(object):
