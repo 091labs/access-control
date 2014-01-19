@@ -53,6 +53,18 @@ def add_user():
     return render_template('new_user.html', form=form)
 
 
+@app.route('/users/del/<int:id>')
+@login_required
+def del_user(id):
+    user = User.query.get(id)
+    if not user:
+        abort(404)
+    db.session.delete(user)
+    db.session.commit()
+    flash('%s removed' % user.email, 'success')
+    return redirect(url_for('users'))
+
+
 @app.route('/users/update_key/<int:id>', methods=['GET', 'POST'])
 @login_required
 def update_key(id):
