@@ -3,6 +3,7 @@
 import RPi.GPIO as GPIO
 from time import sleep
 import sys
+import logging as log
 
 from access import db
 from access.models import User
@@ -41,7 +42,7 @@ class RFidReader(object):
             # Check if the door release has been pressed...
             door_release_pressed = not GPIO.input(self.GPIO_PIN_DOOR_RELEASE)
             if door_release_pressed:
-                print "Door release pressed"
+                log.debug("Door release pressed")
                 self.open_door = True
 
             # If we're not waiting for a bit (i.e. waiting for both lines to
@@ -64,20 +65,20 @@ class RFidReader(object):
                     # First and last bits are checksum bits, ignoring for now.
                     # TODO: use them to check that the number is valid
                     key_number = int(self.number_string[1:-1], 2)
-                    print "Read tag: %d" % key_number
+                    log.info("Read tag: %d" % key_number)
 
                     if testfn(key_number):
-                        print "Key accepted"
+                        log.info("Key accepted")
                         self.open_door = True
                     else:
-                        print "Key not accepted"
+                        log.info("Key not accepted")
                     self.number_string = ""
 
             if self.open_door:
-                print "Maglock open"
+                log.debug("Maglock open")
                 GPIO.output(self.GPIO_PIN_SOLENOID, False)
                 sleep(2)
-                print "Maglock closed"
+                log.debug("Maglock closed")
                 GPIO.output(self.GPIO_PIN_SOLENOID, True)
                 self.open_door = False
 
@@ -88,6 +89,15 @@ def validate_key(key_id):
         return True
     return False
 
+if __name__ == "__main__":
+    log.basicConfig(filename='/var/log/door.log', level=log.DEBUG,
+                    format='%(asctime)s %(message)s')
+    log.debug("Startup")
+    reader = RFidReader()
 
-reader = RFidReader()
-reader.run(validate_key)
+    while True:
+        try:
+            reader.run(validate_key)
+        except Exception as e:
+            log.exception(e)
+            pass
