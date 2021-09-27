@@ -4,9 +4,7 @@ from access.forms import LoginForm, NewPasswordForm, NewKeyForm, NewUserForm
 from access.models import User
 
 from flask import g, redirect, url_for, render_template, request, flash, abort
-from flask.ext.login import login_required, current_user
-from flask.ext.login import login_user, logout_user
-
+from flask_login import login_required, current_user, login_user, logout_user
 
 @login_manager.user_loader
 def load_user(id):
